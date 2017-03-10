@@ -132,8 +132,9 @@ exports.result = function result() {
       ctx.response.body = { error: ctx.browse.error };
     } else if (ctx.browse.result) {
       ctx.response.body = ctx.browse.result;
+    } else {
+      await next();
     }
-    await next();
   };
 };
 
