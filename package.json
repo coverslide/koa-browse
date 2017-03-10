@@ -1,14 +1,27 @@
 {
   "name": "koa-browse",
   "version": "1.0.0",
-  "description": "",
+  "description": "Koa middleware for retrieving metadata and interacting with static files",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coverslide/koa-browse"
+  },
+  "author": "Richard Hoffman <coverslide@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "mz": "^2.6.0"
+    "mz": "^2.6.0",
+    "string-natural-compare": "^2.0.2"
+  },
+  "peerDependencies": {
+    "koa": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0"
   }
 }
