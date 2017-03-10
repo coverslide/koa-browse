@@ -48,16 +48,13 @@ exports.dirList = function dirList(options = {}) {
         async (filename) => {
           const stat = await fs.stat(join(ctx.browse.path, filename));
           return Object.assign({ directory: stat.isDirectory(), filename }, stat);
-        },
-      ),
-    );
+        }));
     if (options.hideDotFiles) {
       ctx.browse.result = ctx.browse.result.filter(file => !file.filename.match(/^\./));
     }
     if (blacklist) {
       ctx.browse.result = ctx.browse.result.filter(file =>
-        !blacklist.includes(file.filename.toLowerCase()),
-      );
+        !blacklist.includes(file.filename.toLowerCase()));
     }
     if (extensionsWhitelist) {
       ctx.browse.result = ctx.browse.result.filter(file => file.directory || extensionsWhitelist.includes(extname(file.filename).replace(/^\./, '').toLowerCase()));
