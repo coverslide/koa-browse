@@ -6,7 +6,8 @@ module.exports = function browse(options = {}) {
   const root = options.root;
   return async function browseAsync(ctx, next) {
     ctx.browse = {};
-    const parts = ctx.request.path.split('/');
+    const path = decodeURIComponent(ctx.request.path);
+    const parts = path.split('/');
     if (options.blacklist) {
       const blacklisted = parts.some(part => options.blacklist.includes(part));
       if (blacklisted) {
@@ -14,7 +15,7 @@ module.exports = function browse(options = {}) {
         return;
       }
     }
-    ctx.browse.path = join(root, ctx.request.path);
+    ctx.browse.path = join(root, path);
     try {
       ctx.browse.stat = await fs.stat(ctx.browse.path);
     } catch (e) {
