@@ -15,6 +15,7 @@ module.exports = function browse(options = {}) {
         return;
       }
     }
+    ctx.browse.filename = parts[parts.length - 1];
     ctx.browse.path = join(root, path);
     try {
       ctx.browse.stat = await fs.stat(ctx.browse.path);
@@ -105,6 +106,8 @@ exports.sendFile = function sendFile(options = {}) {
       }
     }
     ctx.response.type = extname(ctx.browse.path);
+    // manually set the filename
+    ctx.response.set('Content-Disposition', ctx.browse.filename ? `inline; filename=${ctx.browse.filename}` : 'inline');
     ctx.browse.result = fs.createReadStream(ctx.browse.path);
     await next();
   };
@@ -117,7 +120,7 @@ exports.download = function download() {
       return;
     }
     if (ctx.query.download === 'true') {
-      ctx.response.attachment();
+      ctx.response.attachment(ctx.browse.filename);
     }
     await next();
   };
