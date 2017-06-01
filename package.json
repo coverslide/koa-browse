@@ -1,6 +1,6 @@
 {
   "name": "koa-browse",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Koa middleware for retrieving metadata and interacting with static files",
   "main": "index.js",
   "scripts": {

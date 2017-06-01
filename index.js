@@ -106,9 +106,24 @@ exports.sendFile = function sendFile(options = {}) {
       }
     }
     ctx.response.type = extname(ctx.browse.path);
+    const filesize = ctx.browse.stat.size;
+    const range = ctx.request.get('range');
+    const rangeMatch = String(range).match(/([^=]*)=(\d+)-(\d*)$/);
+    if (rangeMatch) {
+      const [match, units, start, end] = rangeMatch;
+      const trueEnd = Math.min(filesize - 1, Number(end || filesize));
+      const trueStart = Math.min(trueEnd, Number(start));
+      ctx.response.status = 206;
+      ctx.response.set('Content-Length', 1 + (trueEnd - trueStart));
+      ctx.response.set('Content-Range', `bytes ${trueStart}-${trueEnd}/${filesize}`);
+      ctx.browse.result = fs.createReadStream(ctx.browse.path, { start: trueStart, end: trueEnd });
+    } else {
+      ctx.response.set('Content-Length', filesize);
+      //ctx.response.set('Content-Range', `bytes 0-${filesize}/${filesize}`);
+      ctx.browse.result = fs.createReadStream(ctx.browse.path);
+    }
     // manually set the filename
     ctx.response.set('Content-Disposition', ctx.browse.filename ? `inline; filename=${ctx.browse.filename}` : 'inline');
-    ctx.browse.result = fs.createReadStream(ctx.browse.path);
     await next();
   };
 };
